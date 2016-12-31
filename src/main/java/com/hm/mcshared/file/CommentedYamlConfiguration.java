@@ -1,0 +1,146 @@
+package com.hm.mcshared.file;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+
+/**
+ * Class to take care of Yaml configuration files by providing some additional methods to the standard Bukkit
+ * YamlConfiguration class. This class enables more modularity, and contains methods to set new configuration parameters
+ * with comments as well as various other convenience methods.
+ * 
+ * @author Pyves
+ *
+ */
+public class CommentedYamlConfiguration extends YamlConfiguration {
+
+	private final FileManager manager;
+	private final JavaPlugin plugin;
+
+	private int numOfComments;
+
+	/**
+	 * Creates a new CommentedYamlConfiguration object representing one of the plugin's configuration files.
+	 * 
+	 * @param fileName Name of the configuration file situated in the resource folder of the plugin.
+	 * @param plugin The plugin making use of the configuration file.
+	 * @throws IOException
+	 * @throws InvalidConfigurationException
+	 */
+	public CommentedYamlConfiguration(String fileName, JavaPlugin plugin)
+			throws IOException, InvalidConfigurationException {
+
+		super();
+		if (fileName == null || fileName.isEmpty()) {
+			throw new IllegalArgumentException("Invalid file name.");
+		}
+		this.plugin = plugin;
+		manager = new FileManager(fileName, plugin);
+		manager.createConfigurationFileIfNotExists(fileName);
+		loadConfiguration();
+	}
+
+	/**
+	 * Gets the requested ConfigurationSection by path. Returns an empty ConfigurationSection if it does not exist.
+	 * 
+	 * @param path Path of the ConfigurationSection to get.
+	 * @return Requested ConfigurationSection or empty one.
+	 */
+	@Override
+	public ConfigurationSection getConfigurationSection(String path) {
+
+		if (this.contains(path)) {
+			return super.getConfigurationSection(path);
+		} else {
+			return this.createSection(path);
+		}
+	}
+
+	/**
+	 * Gets the requested List by path. Returns a List of type String. Used for the caller to be able to infer the type
+	 * without systematically having to cast.
+	 * 
+	 * @param path Path of the List to get.
+	 * @return Requested List of Strings.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getList(String path) {
+
+		return (List<String>) super.getList(path);
+	}
+
+	/**
+	 * Sets the specified path to the given value with the given comment.
+	 * 
+	 * @param path Path of the object to set.
+	 * @param value New value to set the path to.
+	 * @param comment New comment to set the path to. Ignored if null.
+	 */
+	public void set(String path, Object value, String comment) {
+
+		if (comment != null) {
+			// Insert comment as new value in the file; will be converted back to a comment when saved by the
+			// FileManager.
+			this.set(plugin.getDescription().getName() + "_COMMENT_" + numOfComments, comment);
+			numOfComments++;
+		}
+		this.set(path, value);
+	}
+
+	/**
+	 * Sets the specified path to the given value with the given comments (one comment per line).
+	 * 
+	 * @param path Path of the object to set.
+	 * @param value New value to set the path to.
+	 * @param comment New comments to set the path to. Ignored if empty.
+	 */
+	public void set(String path, Object value, String[] comments) {
+
+		for (String comment : comments) {
+			// Insert comment as new value in the file; will be converted back to a comment when saved.
+			this.set(plugin.getDescription().getName() + "_COMMENT_" + numOfComments, comment);
+			numOfComments++;
+		}
+		this.set(path, value);
+	}
+
+	/**
+	 * Loads or reloads the configuration file from disk.
+	 * 
+	 * @throws IOException
+	 * @throws InvalidConfigurationException
+	 */
+	public void loadConfiguration() throws IOException, InvalidConfigurationException {
+
+		this.load(new StringReader(manager.getConfigurationWithReworkedComments()));
+		this.numOfComments = manager.getNumberOfComments();
+	}
+
+	/**
+	 * Saves the configuration file and any modifications that were performed.
+	 * 
+	 * @throws IOException
+	 */
+	public void saveConfiguration() throws IOException {
+
+		String configString = this.saveToString();
+		manager.saveConfiguration(configString);
+	}
+
+	/**
+	 * Performs a backup of the configuration; the backup simply makes a copy of the file and adds a .bak extension to
+	 * it.
+	 * 
+	 * @throws IOException
+	 */
+	public void backupConfiguration() throws IOException {
+
+		manager.backupFile();
+	}
+}
