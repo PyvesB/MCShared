@@ -73,7 +73,7 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	public List<String> getList(String path) {
 
 		List<String> list = (List<String>) super.getList(path);
-		if (list == null) {
+		if (list != null) {
 			return list;
 		}
 		return new ArrayList<>();
