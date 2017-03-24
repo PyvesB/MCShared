@@ -2,6 +2,7 @@ package com.hm.mcshared.file;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -62,8 +63,7 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	}
 
 	/**
-	 * Gets the requested List by path. Returns a List of type String. Used for the caller to be able to infer the type
-	 * without systematically having to cast.
+	 * Gets the requested List by path. Returns a List of type String.
 	 * 
 	 * @param path Path of the List to get.
 	 * @return Requested List of Strings.
@@ -72,7 +72,11 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	@Override
 	public List<String> getList(String path) {
 
-		return (List<String>) super.getList(path);
+		List<String> list = (List<String>) super.getList(path);
+		if (list != null) {
+			return list;
+		}
+		return new ArrayList<>();
 	}
 
 	/**
