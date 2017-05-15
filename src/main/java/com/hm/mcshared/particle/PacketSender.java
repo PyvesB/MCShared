@@ -18,6 +18,7 @@ public final class PacketSender {
 
 	private static final byte CHAT_MESSAGE_BYTE = 1;
 	private static final byte ACTION_BAR_BYTE = 2;
+	private static final int VERSION = Integer.parseInt(PackageType.getServerVersion().split("_")[1]);
 	private static final String CLASS_CHAT_BASE_COMPONENT = "IChatBaseComponent";
 	private static final String CLASS_CRAFT_PLAYER = "CraftPlayer";
 	private static final String CLASS_ENTITY_PLAYER = "EntityPlayer";
@@ -26,6 +27,7 @@ public final class PacketSender {
 	private static final String CLASS_PACKET_PLAY_OUT_TITLE = "PacketPlayOutTitle";
 	private static final String CLASS_PLAYER_CONNECTION = "PlayerConnection";
 	private static final String ENUM_TITLE_ACTION = "EnumTitleAction";
+	private static final String ENUM_CHAT_MESSAGE_TYPE = "ChatMessageType";
 	private static final String FIELD_PLAYER_CONNECTION = "playerConnection";
 	private static final String METHOD_GET_HANDLE = "getHandle";
 	private static final String METHOD_SEND_PACKET = "sendPacket";
@@ -42,7 +44,7 @@ public final class PacketSender {
 	 * 
 	 * @param player Online player to send the packet to.
 	 * @param json The JSON format message to send to the player. See
-	 *        http://minecraft.gamepedia.com/Commands#Raw_JSON_text for more information.
+	 *            http://minecraft.gamepedia.com/Commands#Raw_JSON_text for more information.
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
@@ -62,7 +64,7 @@ public final class PacketSender {
 	 * 
 	 * @param player Online player to send the packet to.
 	 * @param json The JSON format message to send to the player. See
-	 *        http://minecraft.gamepedia.com/Commands#Raw_JSON_text for more information.
+	 *            http://minecraft.gamepedia.com/Commands#Raw_JSON_text for more information.
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
@@ -116,9 +118,28 @@ public final class PacketSender {
 					.invoke(null, ChatColor.translateAlternateColorCodes("&".charAt(0), json));
 		}
 
-		Object packetPlayOutChat = PackageType.MINECRAFT_SERVER.getClass(CLASS_PACKET_PLAY_OUT_CHAT)
-				.getConstructor(PackageType.MINECRAFT_SERVER.getClass(CLASS_CHAT_BASE_COMPONENT), byte.class)
-				.newInstance(parsedMessage, type);
+		Object packetPlayOutChat;
+		if (VERSION < 12) {
+			packetPlayOutChat = PackageType.MINECRAFT_SERVER.getClass(CLASS_PACKET_PLAY_OUT_CHAT)
+					.getConstructor(PackageType.MINECRAFT_SERVER.getClass(CLASS_CHAT_BASE_COMPONENT), byte.class)
+					.newInstance(parsedMessage, type);
+		} else {
+			// New method uses the ChatMessageType enum rather than a byte.
+			Class<?> chatMessageTypeClass = PackageType.MINECRAFT_SERVER.getClass(ENUM_CHAT_MESSAGE_TYPE);
+			Enum<?> chatType = null;
+			for (Object chatMessageType : chatMessageTypeClass.getEnumConstants()) {
+				Enum<?> e = (Enum<?>) chatMessageType;
+				if ("SYSTEM".equalsIgnoreCase(e.name()) && type == CHAT_MESSAGE_BYTE
+						|| "GAME_INFO".equalsIgnoreCase(e.name()) && type == ACTION_BAR_BYTE) {
+					chatType = e;
+					break;
+				}
+			}
+			packetPlayOutChat = PackageType.MINECRAFT_SERVER.getClass(CLASS_PACKET_PLAY_OUT_CHAT)
+					.getConstructor(PackageType.MINECRAFT_SERVER.getClass(CLASS_CHAT_BASE_COMPONENT),
+							chatMessageTypeClass)
+					.newInstance(parsedMessage, chatType);
+		}
 
 		// Send the message packet through the PlayerConnection.
 		PackageType.MINECRAFT_SERVER.getClass(CLASS_PLAYER_CONNECTION)
@@ -131,9 +152,9 @@ public final class PacketSender {
 	 * 
 	 * @param player Online player to send the packet to.
 	 * @param mainJson The title JSON format message to send to the player. See
-	 *        http://minecraft.gamepedia.com/Commands#Raw_JSON_text for more information.
+	 *            http://minecraft.gamepedia.com/Commands#Raw_JSON_text for more information.
 	 * @param subJson The subtitle title JSON format message to send to the player. See
-	 *        http://minecraft.gamepedia.com/Commands#Raw_JSON_text for more information.
+	 *            http://minecraft.gamepedia.com/Commands#Raw_JSON_text for more information.
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
