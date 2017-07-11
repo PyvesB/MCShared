@@ -89,7 +89,7 @@ public class FileManager {
 					// Rework comment line so it becomes a standard key-value pair in the configuration file.
 					// This workaround allows the comment to be saved when using Bukkit's YamlConfiguration class.
 					reworkedConfiguration.append(currentLine.replace(":", "_COLON_").replace("|", "_VERT_")
-							.replace("-", "_HYPHEN_")
+							.replace("-", "_HYPHEN_").replace(" ", "_SPACE_")
 							.replaceFirst("#", plugin.getDescription().getName() + "_COMMENT_" + numOfComments + ": "));
 					numOfComments++;
 				} else {
@@ -166,7 +166,8 @@ public class FileManager {
 			if (line.startsWith(plugin.getDescription().getName() + "_COMMENT")) {
 				// Rework comment line so it is converted back to a normal comment.
 				String comment = ("#" + line.trim().substring(line.indexOf(": ") + 1)).replace("_COLON_", ":")
-						.replace("_HYPHEN_", "-").replace("_VERT_", "|").replaceFirst("# ' ", "# ");
+						.replace("_HYPHEN_", "-").replace("_VERT_", "|").replace("_SPACE_", " ")
+						.replaceFirst("# ' ", "# ");
 				// No empty line between consecutive comment lines or between a comment and its corresponding
 				// parameters; empty line between parameter and new comment.
 				if (previousLineComment) {
