@@ -165,9 +165,8 @@ public class FileManager {
 		for (String line : lines) {
 			if (line.startsWith(plugin.getDescription().getName() + "_COMMENT")) {
 				// Rework comment line so it is converted back to a normal comment.
-				String comment = ("#" + line.trim().substring(line.indexOf(": ") + 1)).replace("_COLON_", ":")
-						.replace("_HYPHEN_", "-").replace("_VERT_", "|").replace("_SPACE_", " ")
-						.replaceFirst("# ' ", "# ");
+				String comment = ("#" + line.substring(line.indexOf(": ") + 2)).replace("_COLON_", ":")
+						.replace("_HYPHEN_", "-").replace("_VERT_", "|").replace("_SPACE_", " ");
 				// No empty line between consecutive comment lines or between a comment and its corresponding
 				// parameters; empty line between parameter and new comment.
 				if (previousLineComment) {
