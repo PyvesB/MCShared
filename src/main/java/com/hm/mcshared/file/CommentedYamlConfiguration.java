@@ -35,7 +35,6 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 */
 	public CommentedYamlConfiguration(String fileName, JavaPlugin plugin)
 			throws IOException, InvalidConfigurationException {
-
 		super();
 		if (fileName == null || fileName.isEmpty()) {
 			throw new IllegalArgumentException("Invalid file name.");
@@ -54,7 +53,6 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 */
 	@Override
 	public ConfigurationSection getConfigurationSection(String path) {
-
 		if (this.contains(path)) {
 			return super.getConfigurationSection(path);
 		} else {
@@ -71,7 +69,6 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> getList(String path) {
-
 		List<String> list = (List<String>) super.getList(path);
 		if (list != null) {
 			return list;
@@ -87,7 +84,6 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 * @param comment New comment to set the path to. Ignored if null.
 	 */
 	public void set(String path, Object value, String comment) {
-
 		if (comment != null) {
 			// Insert comment as new value in the file; will be converted back to a comment when saved by the
 			// FileManager.
@@ -103,10 +99,9 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 * 
 	 * @param path Path of the object to set.
 	 * @param value New value to set the path to.
-	 * @param comment New comments to set the path to. Ignored if empty.
+	 * @param comments New comments to set the path to. Ignored if empty.
 	 */
-	public void set(String path, Object value, String[] comments) {
-
+	public void set(String path, Object value, String... comments) {
 		for (String comment : comments) {
 			// Insert comment as new value in the file; will be converted back to a comment when saved.
 			this.set(plugin.getDescription().getName() + "_COMMENT_" + numOfComments, comment.replace(":", "_COLON_")
@@ -123,7 +118,6 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 * @throws InvalidConfigurationException
 	 */
 	public void loadConfiguration() throws IOException, InvalidConfigurationException {
-
 		this.load(new StringReader(manager.getConfigurationWithReworkedComments()));
 		this.numOfComments = manager.getNumberOfComments();
 	}
@@ -134,7 +128,6 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 * @throws IOException
 	 */
 	public void saveConfiguration() throws IOException {
-
 		String configString = this.saveToString();
 		manager.saveConfiguration(configString);
 	}
@@ -146,7 +139,6 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 * @throws IOException
 	 */
 	public void backupConfiguration() throws IOException {
-
 		manager.backupFile();
 	}
 }

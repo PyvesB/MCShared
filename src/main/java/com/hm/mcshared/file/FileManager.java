@@ -39,7 +39,6 @@ public class FileManager {
 	 * @throws IOException
 	 */
 	public FileManager(String fileName, JavaPlugin plugin) throws IOException {
-
 		this.plugin = plugin;
 		if (fileName.startsWith("/")) {
 			file = new File(plugin.getDataFolder() + fileName.replace("/", File.separator));
@@ -55,7 +54,6 @@ public class FileManager {
 	 * @throws IOException
 	 */
 	public void backupFile() throws IOException {
-
 		File backupFile = new File(plugin.getDataFolder(), file.getName() + ".bak");
 		// Overwrite previous backup only if a newer version of the file exists.
 		if (file.lastModified() > backupFile.lastModified() && file.exists()) {
@@ -78,7 +76,6 @@ public class FileManager {
 	 * @throws IOException
 	 */
 	protected String getConfigurationWithReworkedComments() throws IOException {
-
 		StringBuilder reworkedConfiguration = new StringBuilder();
 		try (FileInputStream fileInputStream = new FileInputStream(file);
 				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream, "UTF-8"))) {
@@ -108,7 +105,6 @@ public class FileManager {
 	 * @return Total number of comments in the file.
 	 */
 	protected int getNumberOfComments() {
-
 		return numOfComments;
 	}
 
@@ -119,7 +115,6 @@ public class FileManager {
 	 * @throws IOException
 	 */
 	protected void saveConfiguration(String configString) throws IOException {
-
 		String configuration = getConfigurationWithRegeneratedComments(configString);
 		try (FileOutputStream fileOutputStream = new FileOutputStream(file);
 				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "UTF-8");
@@ -136,7 +131,6 @@ public class FileManager {
 	 * @throws IOException
 	 */
 	protected void createConfigurationFileIfNotExists(String fileName) throws IOException {
-
 		file.getParentFile().mkdirs();
 		if (file.createNewFile()) {
 			try (OutputStream outputStream = new FileOutputStream(file)) {
@@ -158,7 +152,6 @@ public class FileManager {
 	 * @return String representing original config file.
 	 */
 	private String getConfigurationWithRegeneratedComments(String configString) {
-
 		boolean previousLineComment = false;
 		String[] lines = configString.split("\n");
 		StringBuilder config = new StringBuilder();

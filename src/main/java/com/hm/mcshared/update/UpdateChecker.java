@@ -52,15 +52,14 @@ public class UpdateChecker implements Listener {
 	 * 
 	 * @param plugin The plugin involved in the version checking.
 	 * @param pomLink The link to the plugin's pom.xml. For instance
-	 *        https://raw.githubusercontent.com/PyvesB/AdvancedAchievements/master/pom.xml can be used.
+	 *            https://raw.githubusercontent.com/PyvesB/AdvancedAchievements/master/pom.xml can be used.
 	 * @param downloadLinks All the links from which the plugin can be downloaded; will be displayed in the server's
-	 *        console and in game to users with notificationPermission.
+	 *            console and in game to users with notificationPermission.
 	 * @param notificationPermission Only players with this permissions will be notified in game.
 	 * @param chatHeader Header of the message to display in the chat when notifying that an update is available.
 	 */
-	public UpdateChecker(final JavaPlugin plugin, final String pomLink, final String[] downloadLinks,
-			final String notificationPermission, final String chatHeader) {
-
+	public UpdateChecker(JavaPlugin plugin, String pomLink, String[] downloadLinks, String notificationPermission,
+			String chatHeader) {
 		this.plugin = plugin;
 		this.pomLink = pomLink;
 		this.downloadLinks = downloadLinks;
@@ -75,7 +74,6 @@ public class UpdateChecker implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-
 		// Check if OP to display new version message if needed.
 		if (isUpdateNeeded() && event.getPlayer().hasPermission(notificationPermission)) {
 			event.getPlayer().sendMessage(chatHeader + plugin.getDescription().getName() + " update available: v"
@@ -90,7 +88,6 @@ public class UpdateChecker implements Listener {
 	 * Launches a new thread to asynchronously check whether an update is available.
 	 */
 	public void launchUpdateCheckerTask() {
-
 		updateCheckerFutureTask = new FutureTask<>(new Callable<Boolean>() {
 
 			@Override
@@ -110,7 +107,6 @@ public class UpdateChecker implements Listener {
 	 * @return true is an update is available, false otherwise.
 	 */
 	public boolean isUpdateNeeded() {
-
 		// Completion of the FutureTask has not yet been checked.
 		if (updateNeeded == null) {
 			if (updateCheckerFutureTask.isDone()) {
@@ -139,19 +135,19 @@ public class UpdateChecker implements Listener {
 	 * @return The version tag of the plugin parsed from the specified pom.xml.
 	 */
 	public String getVersion() {
-
 		return version;
 	}
 
 	/**
 	 * Checks if a new version of the plugin is available, and logs in the server's console if a new version is found.
 	 * 
+	 * @return True if an update is available, false otherwise.
+	 * 
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 * @throws SAXException
 	 */
 	private boolean checkForUpdate() throws SAXException, IOException, ParserConfigurationException {
-
 		plugin.getLogger().info("Checking for plugin update...");
 
 		Document document = null;
@@ -196,7 +192,6 @@ public class UpdateChecker implements Listener {
 	 * Logs in the server's console if a new version is found. The new version number and download links are printed.
 	 */
 	private void logUpdate() {
-
 		plugin.getLogger().warning("Update available: v" + version + "! Download at one of the following locations:");
 		for (String link : downloadLinks) {
 			plugin.getLogger().warning("- " + link);

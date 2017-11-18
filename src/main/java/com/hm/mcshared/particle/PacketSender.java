@@ -111,11 +111,11 @@ public final class PacketSender {
 					.forName(PackageType.MINECRAFT_SERVER + "." + CLASS_CHAT_BASE_COMPONENT + "$"
 							+ NESTED_CHAT_SERIALIZER)
 					.getMethod("a", String.class)
-					.invoke(null, ChatColor.translateAlternateColorCodes("&".charAt(0), json));
+					.invoke(null, ChatColor.translateAlternateColorCodes('&', json));
 		} catch (ClassNotFoundException e) {
 			// Older versions of the game.
 			parsedMessage = PackageType.MINECRAFT_SERVER.getClass(NESTED_CHAT_SERIALIZER).getMethod("a", String.class)
-					.invoke(null, ChatColor.translateAlternateColorCodes("&".charAt(0), json));
+					.invoke(null, ChatColor.translateAlternateColorCodes('&', json));
 		}
 
 		Object packetPlayOutChat;
@@ -179,12 +179,12 @@ public final class PacketSender {
 			// Since 1.8.3
 			parsedMainMessage = PackageType.MINECRAFT_SERVER
 					.getClass(CLASS_CHAT_BASE_COMPONENT + "$" + NESTED_CHAT_SERIALIZER).getMethod("a", String.class)
-					.invoke(null, ChatColor.translateAlternateColorCodes("&".charAt(0), mainJson));
+					.invoke(null, ChatColor.translateAlternateColorCodes('&', mainJson));
 		} catch (ClassNotFoundException e) {
 			// Older versions of the game.
 			parsedMainMessage = PackageType.MINECRAFT_SERVER.getClass(NESTED_CHAT_SERIALIZER)
 					.getMethod("a", String.class)
-					.invoke(null, ChatColor.translateAlternateColorCodes("&".charAt(0), mainJson));
+					.invoke(null, ChatColor.translateAlternateColorCodes('&', mainJson));
 		}
 
 		// Parse the json message.
@@ -193,12 +193,12 @@ public final class PacketSender {
 			// Since 1.8.3
 			parsedSubMessage = PackageType.MINECRAFT_SERVER
 					.getClass(CLASS_CHAT_BASE_COMPONENT + "$" + NESTED_CHAT_SERIALIZER).getMethod("a", String.class)
-					.invoke(null, ChatColor.translateAlternateColorCodes("&".charAt(0), subJson));
+					.invoke(null, ChatColor.translateAlternateColorCodes('&', subJson));
 		} catch (ClassNotFoundException e) {
 			// Older versions of the game.
 			parsedSubMessage = PackageType.MINECRAFT_SERVER.getClass(NESTED_CHAT_SERIALIZER)
 					.getMethod("a", String.class)
-					.invoke(null, ChatColor.translateAlternateColorCodes("&".charAt(0), subJson));
+					.invoke(null, ChatColor.translateAlternateColorCodes('&', subJson));
 		}
 
 		Class<?> titleClass;

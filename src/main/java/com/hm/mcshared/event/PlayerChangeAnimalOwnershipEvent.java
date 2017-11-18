@@ -32,7 +32,6 @@ public class PlayerChangeAnimalOwnershipEvent extends Event implements Cancellab
 	 * @param ownedAnimal Tameable animal whose ownership was changed.
 	 */
 	public PlayerChangeAnimalOwnershipEvent(AnimalTamer oldOwner, AnimalTamer newOwner, Tameable ownedAnimal) {
-
 		this.oldOwner = oldOwner;
 		this.newOwner = newOwner;
 		this.ownedAnimal = ownedAnimal;
@@ -41,24 +40,20 @@ public class PlayerChangeAnimalOwnershipEvent extends Event implements Cancellab
 
 	@Override
 	public HandlerList getHandlers() {
-
 		return handlers;
 	}
 
 	public static HandlerList getHandlerList() {
-
 		return handlers;
 	}
 
 	@Override
 	public boolean isCancelled() {
-
 		return cancelled;
 	}
 
 	@Override
 	public void setCancelled(boolean cancel) {
-
 		cancelled = cancel;
 	}
 
@@ -68,7 +63,6 @@ public class PlayerChangeAnimalOwnershipEvent extends Event implements Cancellab
 	 * @return Old owner of the tameable animal.
 	 */
 	public AnimalTamer getOldOwner() {
-
 		return oldOwner;
 	}
 
@@ -78,7 +72,6 @@ public class PlayerChangeAnimalOwnershipEvent extends Event implements Cancellab
 	 * @return New owner of the tameable animal.
 	 */
 	public AnimalTamer getNewOwner() {
-
 		return newOwner;
 	}
 
@@ -88,7 +81,6 @@ public class PlayerChangeAnimalOwnershipEvent extends Event implements Cancellab
 	 * @return Tameable animal whose ownership was changed.
 	 */
 	public Tameable getOwnedAnimal() {
-
 		return ownedAnimal;
 	}
 }
