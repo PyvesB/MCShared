@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hm.mcshared</groupId>
 	<artifactId>MCShared</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<packaging>jar</packaging>
 	<name>MCShared</name>
 	<url>https://github.com/PyvesB/MCShared</url>
@@ -54,6 +54,7 @@
 					<includes>
 						<include>**/*</include>
 					</includes>
+					<merge>true</merge>
 					<repositoryName>MCShared</repositoryName>
 					<repositoryOwner>PyvesB</repositoryOwner>
 				</configuration>
