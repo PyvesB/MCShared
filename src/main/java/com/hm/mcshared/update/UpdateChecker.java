@@ -53,18 +53,18 @@ public class UpdateChecker implements Listener {
 	 * @param plugin The plugin involved in the version checking.
 	 * @param pomLink The link to the plugin's pom.xml. For instance
 	 *            https://raw.githubusercontent.com/PyvesB/AdvancedAchievements/master/pom.xml can be used.
-	 * @param downloadLinks All the links from which the plugin can be downloaded; will be displayed in the server's
-	 *            console and in game to users with notificationPermission.
 	 * @param notificationPermission Only players with this permissions will be notified in game.
 	 * @param chatHeader Header of the message to display in the chat when notifying that an update is available.
+	 * @param downloadLinks All the links from which the plugin can be downloaded; will be displayed in the server's
+	 *            console and in game to users with notificationPermission.
 	 */
-	public UpdateChecker(JavaPlugin plugin, String pomLink, String[] downloadLinks, String notificationPermission,
-			String chatHeader) {
+	public UpdateChecker(JavaPlugin plugin, String pomLink, String notificationPermission, String chatHeader,
+			String... downloadLinks) {
 		this.plugin = plugin;
 		this.pomLink = pomLink;
-		this.downloadLinks = downloadLinks;
 		this.notificationPermission = notificationPermission;
 		this.chatHeader = chatHeader;
+		this.downloadLinks = downloadLinks;
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class UpdateChecker implements Listener {
 		// Check if OP to display new version message if needed.
 		if (isUpdateNeeded() && event.getPlayer().hasPermission(notificationPermission)) {
 			event.getPlayer().sendMessage(chatHeader + plugin.getDescription().getName() + " update available: v"
-					+ version + ". Download at one of the following:");
+					+ version + ". Download it at one of the following locations:");
 			for (String link : downloadLinks) {
 				event.getPlayer().sendMessage(ChatColor.GRAY + "- " + link);
 			}
