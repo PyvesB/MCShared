@@ -10,7 +10,6 @@ import java.util.concurrent.FutureTask;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -36,7 +35,7 @@ public class UpdateChecker implements Listener {
 
 	private final JavaPlugin plugin;
 	private final String pomLink;
-	private final String[] downloadLinks;
+	private final String downloadLink;
 	private final String notificationPermission;
 	private final String chatHeader;
 
@@ -55,16 +54,16 @@ public class UpdateChecker implements Listener {
 	 *            https://raw.githubusercontent.com/PyvesB/AdvancedAchievements/master/pom.xml can be used.
 	 * @param notificationPermission Only players with this permissions will be notified in game.
 	 * @param chatHeader Header of the message to display in the chat when notifying that an update is available.
-	 * @param downloadLinks All the links from which the plugin can be downloaded; will be displayed in the server's
-	 *            console and in game to users with notificationPermission.
+	 * @param downloadLink The link from which the plugin can be downloaded; will be displayed in the server's console
+	 *            and in game to users with notificationPermission.
 	 */
 	public UpdateChecker(JavaPlugin plugin, String pomLink, String notificationPermission, String chatHeader,
-			String... downloadLinks) {
+			String downloadLink) {
 		this.plugin = plugin;
 		this.pomLink = pomLink;
 		this.notificationPermission = notificationPermission;
 		this.chatHeader = chatHeader;
-		this.downloadLinks = downloadLinks;
+		this.downloadLink = downloadLink;
 	}
 
 	/**
@@ -77,10 +76,7 @@ public class UpdateChecker implements Listener {
 		// Check if OP to display new version message if needed.
 		if (isUpdateNeeded() && event.getPlayer().hasPermission(notificationPermission)) {
 			event.getPlayer().sendMessage(chatHeader + plugin.getDescription().getName() + " update available: v"
-					+ version + ". Download it at one of the following locations:");
-			for (String link : downloadLinks) {
-				event.getPlayer().sendMessage(ChatColor.GRAY + "- " + link);
-			}
+					+ version + ". Download at " + downloadLink);
 		}
 	}
 
@@ -192,9 +188,6 @@ public class UpdateChecker implements Listener {
 	 * Logs in the server's console if a new version is found. The new version number and download links are printed.
 	 */
 	private void logUpdate() {
-		plugin.getLogger().warning("Update available: v" + version + "! Download at one of the following locations:");
-		for (String link : downloadLinks) {
-			plugin.getLogger().warning("- " + link);
-		}
+		plugin.getLogger().warning("Update available: v" + version + "! Download at " + downloadLink);
 	}
 }
