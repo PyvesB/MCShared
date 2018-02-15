@@ -84,9 +84,12 @@ public final class FancyMessageSender {
 	 * @param subtitle The secondary text that will appear on the player's screen.
 	 * @throws Exception
 	 */
+	@SuppressWarnings("deprecation")
 	public static void sendTitle(Player player, String title, String subtitle) throws Exception {
-		if (MINOR_VERSION_NUMBER >= 9) {
+		if (MINOR_VERSION_NUMBER >= 11) {
 			player.sendTitle(title, subtitle, 10, 70, 20);
+		} else if (MINOR_VERSION_NUMBER >= 9) {
+			player.sendTitle(title, subtitle);
 		} else {
 			sendTitlePacket(player, constructTextJson(title), constructTextJson(subtitle));
 		}
