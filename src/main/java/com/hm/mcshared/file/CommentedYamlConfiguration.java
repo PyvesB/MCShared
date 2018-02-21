@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -43,6 +44,17 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 		manager = new FileManager(fileName, plugin);
 		manager.createConfigurationFileIfNotExists(fileName);
 		loadConfiguration();
+	}
+	
+	/**
+	 * Gets a set containing all keys in this section, with only the keys of any direct children, and not their own
+	 * children. Helper method.
+	 * 
+	 * @param path
+	 * @return Set containing the shallow configuration keys for the given path.
+	 */
+	public Set<String> getShallowKeys(String path) {
+		return getConfigurationSection(path).getKeys(false);
 	}
 
 	/**
