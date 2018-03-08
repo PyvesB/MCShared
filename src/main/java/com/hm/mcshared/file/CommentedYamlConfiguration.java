@@ -31,21 +31,16 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 * 
 	 * @param fileName Name of the configuration file situated in the resource folder of the plugin.
 	 * @param plugin The plugin making use of the configuration file.
-	 * @throws IOException
-	 * @throws InvalidConfigurationException
 	 */
-	public CommentedYamlConfiguration(String fileName, JavaPlugin plugin)
-			throws IOException, InvalidConfigurationException {
+	public CommentedYamlConfiguration(String fileName, JavaPlugin plugin) {
 		super();
 		if (fileName == null || fileName.isEmpty()) {
 			throw new IllegalArgumentException("Invalid file name.");
 		}
 		this.plugin = plugin;
 		manager = new FileManager(fileName, plugin);
-		manager.createConfigurationFileIfNotExists(fileName);
-		loadConfiguration();
 	}
-	
+
 	/**
 	 * Gets a set containing all keys in this section, with only the keys of any direct children, and not their own
 	 * children. Helper method.
@@ -130,6 +125,7 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 * @throws InvalidConfigurationException
 	 */
 	public void loadConfiguration() throws IOException, InvalidConfigurationException {
+		manager.createConfigurationFileIfNotExists();
 		this.load(new StringReader(manager.getConfigurationWithReworkedComments()));
 		this.numOfComments = manager.getNumberOfComments();
 	}

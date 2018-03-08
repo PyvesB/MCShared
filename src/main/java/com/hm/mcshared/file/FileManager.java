@@ -36,9 +36,8 @@ public class FileManager {
 	 * 
 	 * @param fileName Name of the file situated in the resource folder of the plugin.
 	 * @param plugin The plugin making use of the file.
-	 * @throws IOException
 	 */
-	public FileManager(String fileName, JavaPlugin plugin) throws IOException {
+	public FileManager(String fileName, JavaPlugin plugin) {
 		this.plugin = plugin;
 		if (fileName.startsWith("/")) {
 			file = new File(plugin.getDataFolder() + fileName.replace("/", File.separator));
@@ -127,21 +126,20 @@ public class FileManager {
 	/**
 	 * Writes the configuration file to disk if it does not exist by copying it from the plugin's resources.
 	 * 
-	 * @param fileName Name of the configuration file situated in the resource folder of the plugin.
 	 * @throws IOException
 	 */
-	protected void createConfigurationFileIfNotExists(String fileName) throws IOException {
+	protected void createConfigurationFileIfNotExists() throws IOException {
 		file.getParentFile().mkdirs();
 		if (file.createNewFile()) {
 			try (OutputStream outputStream = new FileOutputStream(file)) {
-				InputStream resource = plugin.getResource(fileName);
+				InputStream resource = plugin.getResource(file.getName());
 				int length;
 				byte[] buf = new byte[1024];
 				while ((length = resource.read(buf)) > 0) {
 					outputStream.write(buf, 0, length);
 				}
 			}
-			plugin.getLogger().info("Successfully created " + fileName + " file.");
+			plugin.getLogger().info("Successfully created " + file.getName() + " file.");
 		}
 	}
 
