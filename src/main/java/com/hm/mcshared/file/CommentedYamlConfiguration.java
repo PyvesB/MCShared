@@ -25,14 +25,30 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	private final JavaPlugin plugin;
 
 	private int numOfComments;
+	
+	/**
+     * Creates a new CommentedYamlConfiguration object representing one of the plugin's configuration files.
+     * 
+     * @param fileName Name of the configuration file situated in the resource folder of the plugin.
+     * @param plugin The plugin making use of the configuration file.
+     */
+    public CommentedYamlConfiguration(String fileName, JavaPlugin plugin) {
+        super();
+        if (fileName == null || fileName.isEmpty()) {
+            throw new IllegalArgumentException("Invalid file name.");
+        }
+        this.plugin = plugin;
+        manager = new FileManager(fileName, fileName, plugin);
+    }
 
 	/**
-	 * Creates a new CommentedYamlConfiguration object representing one of the plugin's configuration files.
-	 * 
-	 * @param fileName Name of the configuration file situated in the resource folder of the plugin.
-	 * @param pluginResourceName The name of the plugin resource.
-	 * @param plugin The plugin making use of the configuration file.
-	 */
+     * Creates a new CommentedYamlConfiguration object representing one of the plugin's configuration files. This
+     * constructor takes a plugin resource name that may be different for the file name used on the server.
+     * 
+     * @param fileName           Name of the configuration file situated in the resource folder of the plugin.
+     * @param pluginResourceName The name of the plugin resource.
+     * @param plugin             The plugin making use of the configuration file.
+     */
 	public CommentedYamlConfiguration(String fileName, String pluginResourceName, JavaPlugin plugin) {
 		super();
 		if (fileName == null || fileName.isEmpty()) {
