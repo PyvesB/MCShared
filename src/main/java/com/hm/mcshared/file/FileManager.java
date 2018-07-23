@@ -27,6 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class FileManager {
 
 	private final JavaPlugin plugin;
+	private final String pluginResourceName;
 
 	private File file;
 	private int numOfComments;
@@ -35,10 +36,12 @@ public class FileManager {
 	 * Constructs an instance of the manager.
 	 * 
 	 * @param fileName Name of the file situated in the resource folder of the plugin.
+	 * @param pluginResourceName 
 	 * @param plugin The plugin making use of the file.
 	 */
-	public FileManager(String fileName, JavaPlugin plugin) {
-		this.plugin = plugin;
+	public FileManager(String fileName, String pluginResourceName, JavaPlugin plugin) {
+        this.plugin = plugin;
+        this.pluginResourceName = pluginResourceName;
 		if (fileName.startsWith("/")) {
 			file = new File(plugin.getDataFolder() + fileName.replace("/", File.separator));
 		} else {
@@ -132,7 +135,7 @@ public class FileManager {
 		file.getParentFile().mkdirs();
 		if (file.createNewFile()) {
 			try (OutputStream outputStream = new FileOutputStream(file)) {
-				InputStream resource = plugin.getResource(file.getName());
+				InputStream resource = plugin.getResource(pluginResourceName);
 				int length;
 				byte[] buf = new byte[1024];
 				while ((length = resource.read(buf)) > 0) {
