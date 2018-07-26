@@ -36,12 +36,23 @@ public class FileManager {
 	 * Constructs an instance of the manager.
 	 * 
 	 * @param fileName Name of the file situated in the resource folder of the plugin.
-	 * @param pluginResourceName 
+	 * @param plugin The plugin making use of the file.
+	 */
+	public FileManager(String fileName, JavaPlugin plugin) {
+		this(fileName, fileName, plugin);
+	}
+
+	/**
+	 * Constructs an instance of the manager. This constructor takes a plugin resource name that may be different for
+	 * the file name used on the server.
+	 * 
+	 * @param fileName Name of the file situated in the resource folder of the plugin.
+	 * @param pluginResourceName The name of the plugin resource.
 	 * @param plugin The plugin making use of the file.
 	 */
 	public FileManager(String fileName, String pluginResourceName, JavaPlugin plugin) {
-        this.plugin = plugin;
-        this.pluginResourceName = pluginResourceName;
+		this.plugin = plugin;
+		this.pluginResourceName = pluginResourceName;
 		if (fileName.startsWith("/")) {
 			file = new File(plugin.getDataFolder() + fileName.replace("/", File.separator));
 		} else {
