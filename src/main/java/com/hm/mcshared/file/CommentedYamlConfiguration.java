@@ -72,11 +72,8 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 */
 	@Override
 	public ConfigurationSection getConfigurationSection(String path) {
-		if (this.contains(path)) {
-			return super.getConfigurationSection(path);
-		} else {
-			return this.createSection(path);
-		}
+		ConfigurationSection configurationSection = super.getConfigurationSection(path);
+		return configurationSection == null ? createSection(path) : configurationSection;
 	}
 
 	/**
