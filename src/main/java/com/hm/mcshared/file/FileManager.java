@@ -147,10 +147,12 @@ public class FileManager {
 		if (file.createNewFile()) {
 			try (OutputStream outputStream = new FileOutputStream(file)) {
 				InputStream resource = plugin.getResource(pluginResourceName);
-				int length;
-				byte[] buf = new byte[1024];
-				while ((length = resource.read(buf)) > 0) {
-					outputStream.write(buf, 0, length);
+				if (resource != null) {
+					int length;
+					byte[] buf = new byte[1024];
+					while ((length = resource.read(buf)) > 0) {
+						outputStream.write(buf, 0, length);
+					}
 				}
 			}
 			plugin.getLogger().info("Successfully created " + file.getName() + " file.");
