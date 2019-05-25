@@ -1,6 +1,5 @@
 package com.hm.mcshared.particle;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -230,19 +229,19 @@ public final class FancyMessageSender {
 	}
 
 	private static String constructTextJson(String text) {
-		return "{\"text\":\"" + StringUtils.replace(text, "\"", "\\\"") + "\"}";
+		return "{\"text\":\"" + text.replace("\"", "\\\"") + "\"}";
 	}
 
 	private static String constructHoverableMessageJson(String message, String hover, String color) {
-		return "{\"text\":\"" + StringUtils.replace(message, "\"", "\\\"") + "\","
+		return "{\"text\":\"" + message.replace("\"", "\\\"") + "\","
 				+ "\"hoverEvent\":{\"action\":\"show_text\",\"value\":[{\"text\":\""
-				+ StringUtils.replace(hover, "\"", "\\\"") + "\",\"color\":\"" + color + "\"}]}}";
+				+ hover.replace("\"", "\\\"") + "\",\"color\":\"" + color + "\"}]}}";
 	}
 
 	private static String constructHoverableCommandMessageJson(String message, String command, String hover, String color) {
-		return "{\"text\":\"" + StringUtils.replace(message, "\"", "\\\"") + "\","
+		return "{\"text\":\"" + message.replace("\"", "\\\"") + "\","
 				+ "\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"" + command + "\"},"
 				+ "\"hoverEvent\":{\"action\":\"show_text\",\"value\":[{\"text\":\""
-				+ StringUtils.replace(hover, "\"", "\\\"") + "\",\"color\":\"" + color + "\"}]}}";
+				+ hover.replace("\"", "\\\"") + "\",\"color\":\"" + color + "\"}]}}";
 	}
 }
