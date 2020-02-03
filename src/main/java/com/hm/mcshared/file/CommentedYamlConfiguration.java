@@ -135,8 +135,9 @@ public class CommentedYamlConfiguration extends YamlConfiguration {
 	 */
 	public void loadConfiguration() throws IOException, InvalidConfigurationException {
 		manager.createConfigurationFileIfNotExists();
-		this.load(new StringReader(manager.getConfigurationWithReworkedComments()));
-		this.numOfComments = manager.getNumberOfComments();
+		map.clear();
+		load(new StringReader(manager.getConfigurationWithReworkedComments()));
+		numOfComments = manager.getNumberOfComments();
 	}
 
 	/**
