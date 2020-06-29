@@ -1,5 +1,7 @@
 package com.hm.mcshared.particle;
 
+import java.util.UUID;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -216,10 +218,21 @@ public final class FancyMessageSender {
 					break;
 				}
 			}
-			packetPlayOutChat = PackageType.MINECRAFT_SERVER.getClass(CLASS_PACKET_PLAY_OUT_CHAT)
-					.getConstructor(PackageType.MINECRAFT_SERVER.getClass(CLASS_CHAT_BASE_COMPONENT),
-							chatMessageTypeClass)
-					.newInstance(parsedMessage, chatType);
+			// Constructor signature Minecraft 1.7 - 1.15:
+			// public PacketPlayOutChat(IChatBaseComponent ichatbasecomponent, ChatMessageType chatmessagetype)
+			// Constructor signature Minecraft 1.16+:
+			// public PacketPlayOutChat(IChatBaseComponent ichatbasecomponent, ChatMessageType chatmessagetype, UUID uuid)
+			if (MINOR_VERSION_NUMBER < 16) {
+				packetPlayOutChat = PackageType.MINECRAFT_SERVER.getClass(CLASS_PACKET_PLAY_OUT_CHAT)
+						.getConstructor(PackageType.MINECRAFT_SERVER.getClass(CLASS_CHAT_BASE_COMPONENT),
+								chatMessageTypeClass)
+						.newInstance(parsedMessage, chatType);
+			} else {
+				packetPlayOutChat = PackageType.MINECRAFT_SERVER.getClass(CLASS_PACKET_PLAY_OUT_CHAT)
+						.getConstructor(PackageType.MINECRAFT_SERVER.getClass(CLASS_CHAT_BASE_COMPONENT),
+								chatMessageTypeClass, UUID.class)
+						.newInstance(parsedMessage, chatType, player.getUniqueId());
+			}
 		}
 
 		// Send the message packet through the PlayerConnection.
